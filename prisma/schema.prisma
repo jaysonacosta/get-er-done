@@ -6,10 +6,23 @@ generator client {
 }
 
 datasource db {
-    provider = "sqlite"
+    provider = "postgresql"
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id String @id @default(cuid())
+model Group {
+    id        BigInt   @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    title     String   @db.VarChar(255)
+    items     Item[]
+}
+
+model Item {
+    id        BigInt   @id @default(autoincrement())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    title     String   @db.VarChar(255)
+    group     Group    @relation(fields: [groupId], references: [id])
+    groupId   BigInt
 }
