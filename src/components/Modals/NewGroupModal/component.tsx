@@ -3,22 +3,28 @@ import React from 'react';
 import { useState } from 'react';
 
 interface NewGroupModalProps {
-	onClickHandler: () => void;
+	toggleModalActive: () => void;
 }
 
-const NewGroupModal: React.FC<NewGroupModalProps> = ({ onClickHandler }) => {
+const NewGroupModal: React.FC<NewGroupModalProps> = ({ toggleModalActive }) => {
 	const [title, setTitle] = useState('');
 
 	const newGroup = trpc.useMutation('create-group');
 
 	const createNewGroup = () => {
 		newGroup.mutate({ title });
-		onClickHandler();
+		toggleModalActive();
 	};
 
 	return (
 		<div className='min-h-screen min-w-screen fixed top-0 bottom-0 left-0 right-0 bg-gray-500/50 flex justify-center items-center'>
-			<div className='h-96 w-80 bg-white rounded flex flex-col p-5 justify-between'>
+			<div className='h-96 w-80 bg-white rounded flex flex-col p-5 justify-between relative'>
+				<span
+					className='absolute top-2 right-2 hover:bg-gray-200 rounded-full p-1 select-none cursor-pointer'
+					onClick={toggleModalActive}
+				>
+					&#10005;
+				</span>
 				<div className='flex flex-col'>
 					<label>Title</label>
 					<input
