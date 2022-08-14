@@ -1,5 +1,9 @@
 import React from 'react';
 
+import Link from 'next/link';
+
+import Group from 'components/Group';
+
 import { trpc } from '@utils/trpc';
 interface SidebarProps {
 	toggleModalActive: () => void;
@@ -7,19 +11,18 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ toggleModalActive }) => {
 	const { data } = trpc.useQuery(['get-all-groups']);
-	console.log(data);
+
 	return (
 		<div className='bg-slate-600 min-h-screen flex flex-col items-center justify-between p-5'>
 			<div className=''>
 				{data &&
 					data.map((group) => {
 						return (
-							<div
-								key={group.id.toString()}
-								className='bg-white rounded p-1 mb-2'
-							>
-								{group.title}
-							</div>
+							<Link key={group.id.toString()} href={`/groups/${group.id}`}>
+								<a>
+									<Group title={group.title} />
+								</a>
+							</Link>
 						);
 					})}
 			</div>
