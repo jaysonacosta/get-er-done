@@ -9,7 +9,12 @@ interface NewGroupModalProps {
 const NewGroupModal: React.FC<NewGroupModalProps> = ({ toggleModalActive }) => {
 	const [title, setTitle] = useState('');
 
-	const newGroup = trpc.useMutation('create-group');
+	const utils = trpc.useContext();
+	const newGroup = trpc.useMutation('create-group', {
+		async onSuccess() {
+			await utils.invalidateQueries(['get-all-groups']);
+		},
+	});
 
 	const createNewGroup = () => {
 		newGroup.mutate({ title });

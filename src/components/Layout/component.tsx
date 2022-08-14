@@ -4,11 +4,11 @@ import { useState } from 'react';
 import Sidebar from './Sidebar';
 import NewGroupModal from '../Modals/NewGroupModal';
 
-import { trpc } from '@utils/trpc';
+interface LayoutProps {
+	children: React.ReactNode;
+}
 
-const Layout: React.FC = () => {
-	const { data } = trpc.useQuery(['get-all-groups']);
-
+const Layout: React.FC<LayoutProps> = ({ children }) => {
 	const [isModalActive, setModalState] = useState(false);
 
 	const toggleModalActive = () => {
@@ -17,9 +17,9 @@ const Layout: React.FC = () => {
 
 	return (
 		<>
-			<div className='min-h-screen bg-slate-400 grid grid-cols-[225px]'>
-				<Sidebar toggleModalActive={toggleModalActive} groups={data} />
-				<main></main>
+			<div className='min-h-screen bg-slate-400 grid grid-cols-[225px_auto]'>
+				<Sidebar toggleModalActive={toggleModalActive} />
+				<main>{children}</main>
 			</div>
 			{isModalActive && <NewGroupModal toggleModalActive={toggleModalActive} />}
 		</>
